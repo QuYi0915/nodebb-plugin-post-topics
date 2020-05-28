@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-post-topics",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A plugin post topics for nodebb",
   "main": "lib.js",
   "scripts": {

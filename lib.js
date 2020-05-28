@@ -12,19 +12,54 @@ plugin.init = function (params, callback) {
     controllers = params.controllers;
 
   app.get('/admin/plugins/post-topics', middleware.admin.buildHeader, renderAdmin);
-  app.get('/api/admin/plugins/post-topics', function (req, res, next) {
+  app.get('/api/admin/plugins/post-topics', middleware.admin.buildHeader, renderAdmin);
+  app.post('/api/admin/plugins/post-topics', function (req, res, next) {
     console.log(req.body);
-    Topics.post({
-      uid: 1,
-      cid: 1,
-      title: '111111111Welcome to your NodeBB!',
-      content: '222222222222222',
-    }).then(() => {
-      console.log(456);
-    }).catch((e) => {
-      console.log(e);
-    });
-    res.send({dataURL: '123123'});
+    let {template = '', config = ''} = req.body;
+    if (template === '' || config === '') {
+      res.send({code: 1, msg: template ? '请填写标题' : '请填写模板'});
+      return;
+    }
+    try {
+      let configArr = JSON.parse(config);
+      let pArr = [];
+
+      function autoSend(title, content, index) {
+        return new Promise((resolve, reject) => {
+          Topics.post({
+            uid: 1,
+            cid: 1,
+            title,
+            content
+          }).then(() => {
+            console.log('第' + index + '条发送成功');
+            resolve();
+          }).catch((e) => {
+            reject(e);
+          });
+        });
+      }
+
+      configArr.forEach((row, index) => {
+        let {title, content} = row;
+        let keys = Object.keys(content);
+        keys.forEach((key) => {
+          let reg = new RegExp(key, 'g');
+          template = template.replace(reg, content[key]);
+        });
+        pArr.push(autoSend(title, template, index));
+      });
+      Promise.all(pArr).then(() => {
+        res.send({code: 0});
+      }).catch((e) => {
+        res.send({code: 1, msg: e});
+      });
+    }
+    catch (err) {
+      console.log(err);
+      res.send({code: 1, msg: '模板错误'});
+    }
+
   });
   callback();
 };

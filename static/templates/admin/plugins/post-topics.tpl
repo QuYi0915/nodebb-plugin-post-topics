@@ -1,4 +1,4 @@
-<h1>Registration Post-Topics</h1>
+<h1>Post-Topics</h1>
 <hr/>
 
 <form>
@@ -9,12 +9,24 @@
   <div>
     <p>
       <label for="Width">[[post-topics:admin-width-label]]</label>
-      <input type="text" data-field="v-code:width" title="Width" class="form-control"
-             placeholder="[[post-topics:admin-width-placeholder]]">
+      <textarea
+          type="text"
+          data-field="v-code:width"
+          title="Width"
+          class="form-control"
+          id="post_topics_template"
+          placeholder="[[post-topics:admin-width-placeholder]]">
+      </textarea>
       <br/>
       <label for="Height">[[post-topics:admin-height-label]]</label>
-      <input type="text" data-field="v-code:height" title="Height" class="form-control"
-             placeholder="[[post-topics:admin-height-placeholder]]">
+      <textarea
+          type="text"
+          data-field="v-code:height"
+          title="Height"
+          class="form-control"
+          id="post_topics_config"
+          placeholder="[[post-topics:admin-height-placeholder]]">
+      </textarea>
     </p>
   </div>
 </form>
@@ -23,8 +35,15 @@
 
 <script>
   $("#PostTopics").on("click", function () {
-    $.post("/api/admin/plugins/post-topics", {name:123,data:456},function (res) {
-      console.log(res);
-    });
+    $.post("/api/admin/plugins/post-topics",
+      {
+        template: $('#post_topics_template').val(),
+        config: $('#post_topics_config').val()
+      },
+      function (res) {
+        if(res.code){
+          app.alertError(res.msg);
+        }
+      });
   });
 </script>

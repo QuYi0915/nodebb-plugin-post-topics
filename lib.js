@@ -54,12 +54,40 @@ plugin.init = function (params, callback) {
       }).catch((e) => {
         res.send({code: 1, msg: e});
       });
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
       res.send({code: 1, msg: '模板错误'});
     }
 
+  });
+  app.post('/api/admin/plugins/post-topics-one', function (req, res, next) {
+    console.log(req.body);
+    let {cid = '', title = '', content = ''} = req.body;
+    if (cid === '') {
+      res.send({code: 1, msg: '板块未设置'});
+      return;
+    }
+
+    if (title === '') {
+      res.send({code: 2, msg: '标题未设置'});
+      return;
+    }
+
+    if (content === '') {
+      res.send({code: 3, msg: '内容未设置'});
+      return;
+    }
+    Topics.post({
+      uid: 3,
+      cid,
+      title,
+      content
+    }).then(() => {
+      res.send({code: 0, msg: '发送成功'});
+    }).catch((e) => {
+      console.log(e);
+      res.send({code: 4, msg: e.toString()});
+    });
   });
   callback();
 };

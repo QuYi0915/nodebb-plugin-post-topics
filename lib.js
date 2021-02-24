@@ -12,7 +12,7 @@ plugin.init = function (params, callback) {
     controllers = params.controllers;
 
   app.get('/admin/plugins/post-topics', middleware.admin.buildHeader, renderAdmin);
-  app.get('/api/admin/plugins/post-topics', middleware.admin.buildHeader, renderAdmin);
+  app.get('/api/admin/plugins/post-topics', renderAdmin);
   app.post('/api/admin/plugins/post-topics', function (req, res, next) {
     console.log(req.body);
     let {template = '', config = ''} = req.body;

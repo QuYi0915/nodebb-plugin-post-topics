@@ -1,7 +1,7 @@
 "use strict";
 //Main
 var plugin = {},
-  meta = module.parent.require('./meta');
+  meta = require.main.require('./src/meta');
 var db = module.parent.require('./database');
 var Topics = module.parent.require('./topics');
 var translator = require.main.require('./public/src/modules/translator');

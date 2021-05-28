@@ -13,8 +13,7 @@ plugin.init = function (params, callback) {
 
   app.get('/admin/plugins/post-topics', middleware.admin.buildHeader, renderAdmin);
   app.get('/api/admin/plugins/post-topics', renderAdmin);
-  app.post('/api/admin/plugins/post-topics', function (req, res, next) {
-    console.log(req.body);
+  app.post('/post-topics', function (req, res, next) {
     let {template = '', config = ''} = req.body;
     if (template === '' || config === '') {
       res.send({code: 1, msg: template ? '请填写标题' : '请填写模板'});
@@ -60,8 +59,7 @@ plugin.init = function (params, callback) {
     }
 
   });
-  app.post('/api/admin/plugins/post-topics-one', function (req, res, next) {
-    console.log(req.body);
+  app.post('/post-topics-one', function (req, res, next) {
     let {cid = '', title = '', content = ''} = req.body;
     if (cid === '') {
       res.send({code: 1, msg: '板块未设置'});

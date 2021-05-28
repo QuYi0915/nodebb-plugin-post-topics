@@ -35,7 +35,7 @@
 
 <script>
   $("#PostTopics").on("click", function () {
-    $.post("/api/admin/plugins/post-topics",
+    $.post("/post-topics",
       {
         template: $('#post_topics_template').val(),
         config: $('#post_topics_config').val()
